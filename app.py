@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request, abort
+from flask_cors import CORS
 import os
 import re
 from datetime import datetime
@@ -10,6 +11,12 @@ app = Flask(__name__)
 # Configuration
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 NEWSPAPERS_DIR = 'newspapers'
+
+# Enable CORS for all domains and routes
+CORS(app)
+
+# Or for more specific CORS configuration, you can use:
+# CORS(app, origins=['https://truecraft.top', 'https://www.truecraft.top', 'http://localhost:3000'])
 
 
 def parse_markdown_metadata(content):
@@ -133,7 +140,7 @@ def newspaper_detail(filename):
                            server_name="TrueCraft Network")
 
 
-# API Routes
+# API Routes with explicit CORS headers
 @app.route('/api/newspapers')
 def api_newspapers():
     """API endpoint for top 5 newspapers."""
@@ -145,11 +152,18 @@ def api_newspapers():
         del api_newspaper['content']  # Remove full content for list API
         api_newspapers.append(api_newspaper)
 
-    return jsonify({
+    response = jsonify({
         'success': True,
         'newspapers': api_newspapers,
         'count': len(api_newspapers)
     })
+    
+    # Add explicit CORS headers (flask-cors should handle this, but just in case)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    
+    return response
 
 
 @app.route('/api/newspaper/<filename>')
@@ -157,12 +171,14 @@ def api_newspaper_detail(filename):
     """API endpoint for specific newspaper details by filename."""
     newspaper = get_newspaper_by_filename(filename)
     if not newspaper:
-        return jsonify({
+        response = jsonify({
             'success': False,
             'error': 'Newspaper not found'
-        }), 404
+        })
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 404
 
-    return jsonify({
+    response = jsonify({
         'success': True,
         'newspaper': {
             'filename': newspaper['filename'],
@@ -173,6 +189,12 @@ def api_newspaper_detail(filename):
             'date': newspaper['date']
         }
     })
+    
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    
+    return response
 
 
 @app.route('/api/newspaper/<int:index>')
@@ -184,14 +206,16 @@ def api_newspaper_by_index(index):
     array_index = index - 1
 
     if array_index < 0 or array_index >= len(newspapers):
-        return jsonify({
+        response = jsonify({
             'success': False,
             'error': f'Newspaper index {index} not found. Available range: 1-{len(newspapers)}'
-        }), 404
+        })
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 404
 
     newspaper = newspapers[array_index]
 
-    return jsonify({
+    response = jsonify({
         'success': True,
         'newspaper': {
             'index': index,
@@ -203,6 +227,23 @@ def api_newspaper_by_index(index):
             'date': newspaper['date']
         }
     })
+    
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    
+    return response
+
+
+# Handle preflight OPTIONS requests
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        response = jsonify({'status': 'OK'})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add('Access-Control-Allow-Headers', "*")
+        response.headers.add('Access-Control-Allow-Methods', "*")
+        return response
 
 
 @app.errorhandler(404)
