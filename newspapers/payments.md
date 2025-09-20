@@ -1,7 +1,7 @@
 ---
 title: "TrueCraft Network Introduces New Payment Options"
 description: "TrueCraft Network now supports eZcash and BankTransfer through Discord support. Enjoy smoother transactions and easier server access!"
-banner_image: "images/payment_banner.png"
+banner_image: "images/payment_banner.jpg"
 author: "Your Name"
 date: "2025-09-20"
 ---
