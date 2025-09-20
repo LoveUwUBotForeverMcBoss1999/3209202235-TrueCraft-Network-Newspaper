@@ -1,0 +1,93 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--text-light);">
+                TrueCraft Network News
+            </h1>
+            <p class="lead mb-4" style="color: var(--text-muted);">
+                Stay updated with the latest news, events, and updates from TrueCraft Network. Your source for Minecraft community news.
+            </p>
+            <div class="hero-actions d-flex gap-3 justify-content-center flex-wrap mb-5">
+                <a class="btn btn-primary btn-lg px-4" href="{{ url_for('newspapers_list') }}">
+                    <i class="fas fa-newspaper me-2"></i>All News
+                </a>
+                <a class="btn btn-secondary btn-lg px-4" href="https://discord.truecraft.top/" target="_blank">
+                    <i class="fab fa-discord me-2"></i>Join Discord
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest News Section -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: var(--text-light);">
+            <i class="fas fa-fire me-2" style="color: var(--accent);"></i>Latest News
+        </h2>
+        <a href="{{ url_for('newspapers_list') }}" class="btn btn-outline-light">
+            <i class="fas fa-arrow-right me-2"></i>View All
+        </a>
+    </div>
+
+    {% if newspapers %}
+    <div class="row g-4">
+        {% for newspaper in newspapers %}
+        <div class="col-lg-6 col-md-6">
+            <div class="card h-100">
+                <!-- News Image -->
+                <div class="item-image-wrapper">
+                    {% if newspaper.banner_image %}
+                    <img src="{{ url_for('static', filename=newspaper.banner_image.replace('static/', '').replace('images/', 'images/')) }}"
+                         alt="{{ newspaper.title }}" class="item-image">
+                    {% else %}
+                    <div class="item-placeholder">
+                        <i class="fas fa-newspaper"></i>
+                        <span>News Article</span>
+                    </div>
+                    {% endif %}
+                    <div class="category-badge">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        {{ newspaper.date }}
+                    </div>
+                </div>
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-3" style="color: var(--text-light);">
+                        {{ newspaper.title }}
+                    </h5>
+                    <p class="card-text flex-grow-1" style="color: var(--text-muted);">
+                        {{ newspaper.description }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small style="color: var(--text-muted);">
+                            <i class="fas fa-user me-1"></i>{{ newspaper.author }}
+                        </small>
+                        <a href="{{ url_for('newspaper_detail', filename=newspaper.filename) }}"
+                           class="btn btn-primary btn-sm">
+                            <i class="fas fa-book-open me-1"></i>Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <i class="fas fa-newspaper empty-orders-icon mb-4"></i>
+        <h4 style="color: var(--text-light);">No News Available</h4>
+        <p style="color: var(--text-muted);">
+            Check back later for the latest TrueCraft Network updates!
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

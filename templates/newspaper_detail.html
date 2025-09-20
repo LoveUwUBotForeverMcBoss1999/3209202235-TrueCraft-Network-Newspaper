@@ -1,0 +1,308 @@
+<!-- templates/newspaper_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Breadcrumb Navigation -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb" style="background: var(--bg-panel); border: 2px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('index') }}" style="color: var(--primary);">
+                <i class="fas fa-home me-1"></i>Home
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('newspapers_list') }}" style="color: var(--primary);">
+                <i class="fas fa-newspaper me-1"></i>News
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" style="color: var(--text-muted);">
+            {{ newspaper.title }}
+        </li>
+    </ol>
+</nav>
+
+<!-- Article Header -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <div class="card">
+            <!-- Banner Image -->
+            {% if newspaper.banner_image %}
+            <div style="height: 300px; overflow: hidden; border-radius: 15px 15px 0 0;">
+                <img src="{{ url_for('static', filename=newspaper.banner_image.replace('static/', '').replace('images/', 'images/')) }}"
+                     alt="{{ newspaper.title }}"
+                     class="w-100 h-100"
+                     style="object-fit: cover; object-position: center;">
+            </div>
+            {% endif %}
+
+            <div class="card-body">
+                <!-- Article Title -->
+                <h1 class="display-5 fw-bold mb-4" style="color: var(--text-light);">
+                    {{ newspaper.title }}
+                </h1>
+
+                <!-- Article Meta -->
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-8">
+                        <div class="d-flex flex-wrap align-items-center gap-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user me-2" style="color: var(--primary);"></i>
+                                <span style="color: var(--text-light); font-weight: 600;">{{ newspaper.author }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-alt me-2" style="color: var(--secondary);"></i>
+                                <span style="color: var(--text-muted);">{{ newspaper.date }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tags me-2" style="color: var(--accent);"></i>
+                                <span style="color: var(--text-muted);">TrueCraft Network</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-flex justify-content-md-end gap-2">
+                            <button class="btn btn-outline-light btn-sm" onclick="copyToClipboard(window.location.href)">
+                                <i class="fas fa-share-alt me-1"></i>Share
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="window.print()">
+                                <i class="fas fa-print me-1"></i>Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Description -->
+                <div class="alert alert-info mb-4" style="background: rgba(122, 63, 242, 0.1); border-color: var(--primary);">
+                    <h5 style="color: var(--primary); margin-bottom: 0.5rem;">
+                        <i class="fas fa-info-circle me-2"></i>Article Summary
+                    </h5>
+                    <p style="color: var(--text-light); margin-bottom: 0;">{{ newspaper.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Article Content -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body" style="padding: 2.5rem;">
+                <!-- Article Content -->
+                <div class="article-content" style="color: var(--text-light); line-height: 1.8; font-size: 1.1rem;">
+                    {{ newspaper.html_content | safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ url_for('newspapers_list') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i>Back to News
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i>Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Article Info Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Article Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="info-item mb-3">
+                    <div class="info-label">Published</div>
+                    <div class="info-value">{{ newspaper.date }}</div>
+                </div>
+                <div class="info-item mb-3">
+                    <div class="info-label">Author</div>
+                    <div class="info-value">{{ newspaper.author }}</div>
+                </div>
+                <div class="info-item mb-3">
+                    <div class="info-label">Category</div>
+                    <div class="info-value">TrueCraft News</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Reading Time</div>
+                    <div class="info-value">~{{ ((newspaper.content | length) / 200) | round(0, 'ceil') | int }} min</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="https://discord.truecraft.top/" target="_blank" class="btn btn-primary">
+                        <i class="fab fa-discord me-2"></i>Join Discord
+                    </a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('mc.truecraft.top')">
+                        <i class="fas fa-server me-2"></i>Copy Server IP
+                    </button>
+                    <a href="http://truecraft.top/" target="_blank" class="btn btn-outline-light">
+                        <i class="fas fa-globe me-2"></i>Visit Website
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connect Info -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-gamepad me-2"></i>Connect & Play
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-server mb-3" style="font-size: 2.5rem; color: var(--primary);"></i>
+                </div>
+                <h6 class="fw-bold mb-2" style="color: var(--text-light);">Server Address</h6>
+                <div class="bg-dark p-3 rounded mb-3" style="border: 2px solid var(--border-color);">
+                    <code style="color: var(--secondary); font-size: 1.2rem; font-weight: 700;">mc.truecraft.top</code>
+                </div>
+                <p class="small mb-0" style="color: var(--text-muted);">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Compatible with Minecraft 1.19+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Article Content Styling -->
+<style>
+.article-content h1, .article-content h2, .article-content h3,
+.article-content h4, .article-content h5, .article-content h6 {
+    color: var(--text-light);
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-content h1 { color: var(--primary); }
+.article-content h2 { color: var(--secondary); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+
+.article-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+}
+
+.article-content blockquote {
+    background: var(--bg-dark);
+    border-left: 4px solid var(--primary);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.article-content ul, .article-content ol {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.article-content li {
+    margin-bottom: 0.5rem;
+}
+
+.article-content code {
+    background: var(--bg-dark);
+    color: var(--secondary);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+}
+
+.article-content pre {
+    background: var(--bg-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.article-content pre code {
+    background: none;
+    padding: 0;
+    color: var(--text-light);
+}
+
+.article-content a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.article-content a:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+.article-content strong {
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.article-content em {
+    color: var(--text-muted);
+}
+
+.article-content hr {
+    border-color: var(--border-color);
+    margin: 2rem 0;
+}
+
+.article-content table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    background: var(--bg-dark);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.article-content th, .article-content td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.article-content th {
+    background: var(--bg-panel);
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.article-content td {
+    color: var(--text-muted);
+}
+</style>
+
+{% endblock %}

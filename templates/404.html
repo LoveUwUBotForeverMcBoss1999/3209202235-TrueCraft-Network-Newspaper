@@ -1,0 +1,78 @@
+<!-- templates/404.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center py-5">
+    <!-- 404 Icon -->
+    <div class="mb-4">
+        <i class="fas fa-exclamation-triangle" style="font-size: 6rem; color: var(--accent);"></i>
+    </div>
+
+    <!-- Error Message -->
+    <h1 class="display-4 fw-bold mb-3" style="color: var(--text-light);">
+        404 - Page Not Found
+    </h1>
+
+    <p class="lead mb-4" style="color: var(--text-muted);">
+        The news article or page you're looking for doesn't exist or has been moved.
+    </p>
+
+    <!-- Action Buttons -->
+    <div class="d-flex gap-3 justify-content-center flex-wrap mb-5">
+        <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-home me-2"></i>Go Home
+        </a>
+        <a href="{{ url_for('newspapers_list') }}" class="btn btn-secondary btn-lg">
+            <i class="fas fa-newspaper me-2"></i>Browse News
+        </a>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: var(--primary);">
+                        <i class="fas fa-lightbulb me-2"></i>What can you do?
+                    </h5>
+                    <ul class="list-unstyled text-start" style="color: var(--text-muted);">
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2" style="color: var(--secondary);"></i>
+                            Check the URL for any typos
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2" style="color: var(--secondary);"></i>
+                            Browse our latest news articles
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check me-2" style="color: var(--secondary);"></i>
+                            Use the search function to find content
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check me-2" style="color: var(--secondary);"></i>
+                            Visit our Discord for community support
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Server Info -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-lg-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-server mb-3" style="font-size: 2rem; color: var(--primary);"></i>
+                    <h6 class="fw-bold mb-2" style="color: var(--text-light);">Still want to play?</h6>
+                    <div class="bg-dark p-2 rounded mb-3" style="border: 2px solid var(--border-color);">
+                        <code style="color: var(--secondary); font-weight: 700;">mc.truecraft.top</code>
+                    </div>
+                    <small style="color: var(--text-muted);">Join our Minecraft server</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

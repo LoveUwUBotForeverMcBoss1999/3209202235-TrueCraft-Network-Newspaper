@@ -1,0 +1,666 @@
+<!-- templates/base.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{{ server_name }} News{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{{ server_name }} News Portal">
+    <meta property="og:description" content="Stay updated with the latest news, events, and updates from TrueCraft Network. Your premier Minecraft community news source.">
+    <meta property="og:image" content="{{ url_for('static', filename='logos/logo.png') }}">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logos/logo.png') }}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Theme Colors */
+            --primary: #7A3FF2;
+            --secondary: #FFB100;
+            --bg-dark: #0E0E12;
+            --bg-panel: #1A1B20;
+            --text-light: #F4F4F6;
+            --text-muted: #9A9BA3;
+            --accent: #E94560;
+            --border-color: #2D2E34;
+            --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.15);
+            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.2);
+            --text-lowkey: #d6d6d6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-panel) 100%);
+            color: var(--text-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Top Banner */
+        .top-banner {
+            width: 100%;
+            height: 120px;
+            background: url('{{ url_for("static", filename="logos/topbanner.gif") }}') center/cover no-repeat;
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(14,14,18,0.7) 0%, rgba(14,14,18,0.3) 50%, rgba(14,14,18,0.7) 100%);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(26, 27, 32, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-light);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--text-light) !important;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--secondary) !important;
+        }
+
+        .navbar-brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            transition: border-color 0.2s ease;
+        }
+
+        .navbar-brand:hover img {
+            border-color: var(--secondary);
+        }
+
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-light) !important;
+            background: linear-gradient(135deg, var(--primary), #9B59F7);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #9B59F7);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-medium);
+            color: white;
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #FFCA42);
+            border: none;
+            color: var(--bg-dark);
+            font-weight: 700;
+            padding: 0.875rem 2rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: var(--shadow-medium);
+            color: var(--bg-dark);
+            opacity: 0.9;
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--border-color);
+            color: var(--text-light);
+            background: transparent;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-outline-light:hover {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-panel);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            background: var(--bg-dark);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.25rem 1.5rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.75rem;
+            color: var(--text-light);
+        }
+
+        .card-title {
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Store Item Images */
+        .item-image-wrapper {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-dark);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover .item-image {
+            transform: scale(1.02);
+        }
+
+        .item-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 0.5rem;
+        }
+
+        .item-placeholder i {
+            font-size: 3rem;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Form Controls */
+        .form-control,
+        .form-select {
+            background: var(--bg-dark);
+            border: 2px solid var(--border-color);
+            color: var(--text-light);
+            border-radius: 8px;
+            padding: 0.875rem 1.25rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: var(--bg-panel);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(122, 63, 242, 0.1);
+            color: var(--text-light);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb-item a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            color: var(--secondary);
+        }
+
+        /* Alerts */
+        .alert {
+            border: none;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            border-left: 4px solid;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border-left-color: #28a745;
+        }
+
+        .alert-danger {
+            background: rgba(233, 69, 96, 0.1);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .alert-warning {
+            background: rgba(255, 177, 0, 0.1);
+            color: var(--secondary);
+            border-left-color: var(--secondary);
+        }
+
+        .alert-info {
+            background: rgba(122, 63, 242, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        /* Statistics Cards */
+        .stat-card {
+            background: var(--bg-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-light);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Info Items */
+        .info-item {
+            background: var(--bg-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Empty States */
+        .empty-orders-icon {
+            font-size: 5rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 5rem;
+            padding: 3rem 0;
+            border-top: 2px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            background: var(--bg-dark);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Animation */
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-banner {
+                height: 80px;
+            }
+
+            .navbar-brand {
+                font-size: 1.35rem;
+            }
+
+            .navbar-brand img {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.85rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            .item-image-wrapper {
+                height: 200px;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="top-banner"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logos/logo.png') }}" alt="{{ server_name }}">
+                {{ server_name }} News
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars" style="color: var(--text-light);"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('newspapers_list') }}">
+                            <i class="fas fa-newspaper me-2"></i>All News
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a class="btn btn-outline-light me-2" href="https://discord.truecraft.top/" target="_blank">
+                        <i class="fab fa-discord me-2"></i>Discord
+                    </a>
+                    <a class="btn btn-primary" href="http://truecraft.top/" target="_blank">
+                        <i class="fas fa-globe me-2"></i>Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="mb-4">
+            {% for category, msg in messages %}
+            <div class="alert alert-{{ 'info' if category=='info' else category }} alert-dismissible fade show animate-fade-in" role="alert">
+                <i class="fas fa-{{ 'info-circle' if category=='info' else 'check-circle' if category=='success' else 'exclamation-triangle' if category=='warning' else 'times-circle' }} me-2"></i>
+                {{ msg }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Page Content -->
+        <main class="animate-fade-in">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{ server_name }} |
+                <a href="https://discord.truecraft.top/" target="_blank">
+                    <i class="fab fa-discord me-2"></i>Join our Discord
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Utility functions
+        window.showToast = function(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast && toast.parentNode) {
+                    const bsAlert = new bootstrap.Alert(toast);
+                    bsAlert.close();
+                }
+            }, 4000);
+        };
+
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy to clipboard', 'danger');
+            });
+        };
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert && alert.parentNode) {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            });
+
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add loading state to forms
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn && !submitBtn.disabled) {
+                        submitBtn.classList.add('loading');
+                    }
+                });
+            });
+        });
+
+        // Performance optimization: Lazy load images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    </script>
+</body>
+</html>
