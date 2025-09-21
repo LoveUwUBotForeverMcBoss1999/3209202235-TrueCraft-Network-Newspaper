@@ -15,19 +15,30 @@ date: "2025-09-22"
 We are excited to announce that the **staff application** is officially open! 🎉  
 Applications will remain open **until the release of Season 2, plus an additional 2 weeks**.  
 
-If you’ve ever wanted to **be part of our team**, this is your chance. Staff members play a crucial role in helping the server run smoothly, supporting players, and shaping the future of TrueCraft.  
+We are looking for passionate and skilled individuals to join our team, including people who have knowledge in:  
+- **PaperMC Plugins** – helping with server setup, troubleshooting, and plugin management  
+- **Networking** – understanding server performance, connections, and uptime  
+- **Moderation** – keeping the community safe, fair, and welcoming  
+- **Support & Communication** – assisting players, answering questions, and providing guidance  
+
+Additionally, we value team members who:  
+- Can **communicate clearly** and professionally  
+- Are **reliable and proactive**  
+- Enjoy **collaborating with others** to improve the server  
+- Are **creative problem-solvers** and can handle unexpected situations  
+- Have a **passion for Minecraft and the TrueCraft Network community**  
 
 ## Important Details
 - ✅ **Staff Applications are Open Now**  
 - ⏳ **Closing Date:** 2 weeks after the launch of Season 2  
 - ⚠️ **Limited Slots:** Not all applicants will be accepted  
-- 📌 **Positions:** Helper, Moderator, and more  
+- 📌 **Roles Available:** Helpers, Moderators, Supporters, Communicators, Plugin & Network Specialists, and more  
 
 ## Apply Now
-Fill out the official staff application form below:  
+If you think you’ve got what it takes, fill out the official staff application form:  
 👉 [Staff Application Form](https://forms.gle/jcKkiUzXWUK3pibB6)  
 
 ---
 
-The **TrueCraft Network** is always growing, and we’re looking for dedicated players to join the journey.  
-If you think you’ve got what it takes, don’t wait—**apply today!**  
+The **TrueCraft Network** is growing, and we need dedicated, talented, and communicative team members to help shape its future.  
+If this sounds like you, don’t wait—**apply today!**
