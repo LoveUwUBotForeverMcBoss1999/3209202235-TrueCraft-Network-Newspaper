@@ -2,7 +2,7 @@
 title: "TrueCraft SMP Evolves Into TrueCraft Network"
 description: "TrueCraft SMP transforms into TrueCraft Network, launching Lifesteal and Survival Season 2 to satisfy all playstyles!"
 banner_image: "images/get_stard.jpg"
-author: "Your Name"
+author: "McBoss"
 date: "2025-09-21"
 ---
 
