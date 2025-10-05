@@ -2,7 +2,7 @@
 title: "The TrueCraft Network Launches Today!"
 description: "TrueCraft Network officially opens its doors with Lifesteal, Legacy SMP, and a new Survival mode on the horizon."
 banner_image: "images/Truecraft_release.png"
-author: "TrueCraft Team"
+author: "McBoss"
 date: "2025-10-05"
 ---
 
