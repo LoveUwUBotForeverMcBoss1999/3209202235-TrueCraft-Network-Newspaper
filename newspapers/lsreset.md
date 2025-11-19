@@ -2,7 +2,7 @@
 title: "📢 Lifesteal World Reset Incoming!"
 description: "Prepare for the Lifesteal world reset on TrueCraft! New features, updated world border, and a fresh start await."
 banner_image: "images/lsreset.jpg"
-author: "TrueCraft Staff"
+author: "McBoss"
 date: "2025-11-19"
 ---
 
