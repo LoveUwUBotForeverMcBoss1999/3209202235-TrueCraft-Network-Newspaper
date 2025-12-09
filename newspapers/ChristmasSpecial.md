@@ -2,7 +2,7 @@
 title: "🎄 Christmas Special – TrueCraftNetwork Store"
 description: "Get 20% off ranks, coins, money pouches & crate keys! Limited to first 10 shoppers."
 banner_image: "images/christmas-sale.png"
-author: "TrueCraft Team"
+author: "McBoss"
 date: "2025-12-09"
 ---
 
@@ -35,3 +35,4 @@ The holidays are here, and TrueCraft Network is spreading the cheer! For a **lim
 ---
 
 Upgrade your TrueCraft experience this Christmas — **more coins, better ranks, epic crates**! 🎉
+
